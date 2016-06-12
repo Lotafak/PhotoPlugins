@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PhotoPlugin
 {
@@ -24,5 +14,28 @@ namespace PhotoPlugin
         {
             InitializeComponent();
         }
+
+        private void Image_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Create the TransformedBitmap
+            //TransformedBitmap transformBmp = new TransformedBitmap();
+
+            // Create a BitmapImage
+            BitmapImage bmpImage = new BitmapImage();
+            bmpImage.BeginInit();
+            bmpImage.UriSource = new Uri("../../Images/pidgeon.jpg", UriKind.RelativeOrAbsolute);
+            bmpImage.EndInit();
+
+            // Properties must be set between BeginInit and EndInit
+            //transformBmp.BeginInit();
+            //transformBmp.Source = bmpImage;
+            //RotateTransform transform = new RotateTransform(90);
+            //transformBmp.Transform = transform;
+            //transformBmp.EndInit();
+
+            var image = sender as Image;
+            if (image != null) image.Source = bmpImage;
+        }
+    
     }
 }

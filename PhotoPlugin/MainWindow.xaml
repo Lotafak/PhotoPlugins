@@ -6,7 +6,39 @@
         xmlns:local="clr-namespace:PhotoPlugin"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <DockPanel >
+        <Menu DockPanel.Dock="Top" Height="24">
+            <MenuItem Width="24">
+                <MenuItem.Icon>
+                    <Image Source="Assets/icon-refresh-128.png"
+                           RenderOptions.BitmapScalingMode="Fant"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
+
+
+        <!--LastChildFill="True"-->
+        <!--<Menu DockPanel.Dock="Top">
+            <MenuItem Header="asdsd">
+                <MenuItem Header="asdasd">
+                    <MenuItem Name="EnglishMenuItem" 
+                              Header="asdasd" 
+                                  IsCheckable="True" 
+                                  IsChecked="True" />
+                    <MenuItem Name="PolishMenuItem" 
+                              Header="asdasd" 
+                                  IsCheckable="True" />
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        Loaded="Image_Loaded
+        -->
+        <Grid>
+            <Image HorizontalAlignment="Center" Loaded="Image_Loaded">
+                <!--<Image.Source>
+                    <BitmapImage UriSource="pidgeon.jpg" Rotation="Rotate270" />
+                </Image.Source>-->
+            </Image>
+        </Grid>
+    </DockPanel>
 </Window>
