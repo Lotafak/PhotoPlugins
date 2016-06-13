@@ -106,6 +106,12 @@
     <Resource Include="Images\16\rotate-cw.png" />
     <Resource Include="Images\16\undo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ICommand\CommandInterface.csproj">
+      <Project>{02c9b748-e3fa-4e94-95d9-6bd24ef309a6}</Project>
+      <Name>CommandInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

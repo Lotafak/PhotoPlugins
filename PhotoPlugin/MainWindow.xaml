@@ -8,6 +8,14 @@
         Title="MainWindow" Height="350" Width="525">
     <DockPanel >
         <Menu DockPanel.Dock="Top" Height="24">
+            <MenuItem Header="File">
+                <MenuItem Header="Add plugins..." Click="AddPlugins_Click">
+                    <MenuItem.Icon>
+                        <Image Source="Images/16/plugin.png"
+                               RenderOptions.BitmapScalingMode="Fant"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="_Undo" Command="Undo">
                     <MenuItem.Icon>
