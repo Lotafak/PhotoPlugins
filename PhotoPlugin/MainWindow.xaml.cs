@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace PhotoPlugin
@@ -8,7 +9,7 @@ namespace PhotoPlugin
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -36,6 +37,27 @@ namespace PhotoPlugin
             var image = sender as Image;
             if (image != null) image.Source = bmpImage;
         }
-    
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Image = RotateCw();
+        }
+
+        private Image RotateCw()
+        {
+
+            Image img = Image;
+
+            TransformedBitmap transformBmp = new TransformedBitmap();
+            transformBmp.BeginInit();
+            transformBmp.Source = (BitmapSource)Image.Source;
+            RotateTransform transform = new RotateTransform(90);
+            transformBmp.Transform = transform;
+            transformBmp.EndInit();
+
+            img.Source = transformBmp;
+
+            return img;
+        }
     }
 }

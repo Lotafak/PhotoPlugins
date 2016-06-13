@@ -8,9 +8,9 @@
         Title="MainWindow" Height="350" Width="525">
     <DockPanel >
         <Menu DockPanel.Dock="Top" Height="24">
-            <MenuItem Width="24">
+            <MenuItem Width="24" Click="MenuItem_Click">
                 <MenuItem.Icon>
-                    <Image Source="Assets/icon-refresh-128.png"
+                    <Image Source="Images/16/rotate-cw.png"
                            RenderOptions.BitmapScalingMode="Fant"/>
                 </MenuItem.Icon>
             </MenuItem>
@@ -34,7 +34,7 @@
         Loaded="Image_Loaded
         -->
         <Grid>
-            <Image HorizontalAlignment="Center" Loaded="Image_Loaded">
+            <Image HorizontalAlignment="Center" Loaded="Image_Loaded" Name="Image">
                 <!--<Image.Source>
                     <BitmapImage UriSource="pidgeon.jpg" Rotation="Rotate270" />
                 </Image.Source>-->
