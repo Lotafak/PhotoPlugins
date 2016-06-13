@@ -8,37 +8,33 @@
         Title="MainWindow" Height="350" Width="525">
     <DockPanel >
         <Menu DockPanel.Dock="Top" Height="24">
-            <MenuItem Width="24" Click="MenuItem_Click">
+            <MenuItem Header="Edit">
+                <MenuItem Header="_Undo" Command="Undo">
+                    <MenuItem.Icon>
+                        <Image Source="Images/16/undo.png"
+                           RenderOptions.BitmapScalingMode="Fant"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Redo" Command="Redo" >
+                    <MenuItem.Icon>
+                        <Image Source="Images/16/redo.png"
+                           RenderOptions.BitmapScalingMode="Fant"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Width="24" Click="RotateClockwise_Click">
                 <MenuItem.Icon>
                     <Image Source="Images/16/rotate-cw.png"
                            RenderOptions.BitmapScalingMode="Fant"/>
                 </MenuItem.Icon>
             </MenuItem>
         </Menu>
-
-
-        <!--LastChildFill="True"-->
-        <!--<Menu DockPanel.Dock="Top">
-            <MenuItem Header="asdsd">
-                <MenuItem Header="asdasd">
-                    <MenuItem Name="EnglishMenuItem" 
-                              Header="asdasd" 
-                                  IsCheckable="True" 
-                                  IsChecked="True" />
-                    <MenuItem Name="PolishMenuItem" 
-                              Header="asdasd" 
-                                  IsCheckable="True" />
-                </MenuItem>
-            </MenuItem>
-        </Menu>
-        Loaded="Image_Loaded
-        -->
-        <Grid>
-            <Image HorizontalAlignment="Center" Loaded="Image_Loaded" Name="Image">
-                <!--<Image.Source>
-                    <BitmapImage UriSource="pidgeon.jpg" Rotation="Rotate270" />
-                </Image.Source>-->
-            </Image>
+        <Grid Name="MainGrid">
+            <Image HorizontalAlignment="Center" Loaded="Image_Loaded" Name="Image" />
         </Grid>
     </DockPanel>
+    <Window.CommandBindings>
+        <CommandBinding Command="Undo" Executed="UndoButton_Click"></CommandBinding>
+        <CommandBinding Command="Redo" Executed="RedoButton_Click"></CommandBinding>
+    </Window.CommandBindings>
 </Window>

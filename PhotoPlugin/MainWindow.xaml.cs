@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -9,7 +10,7 @@ namespace PhotoPlugin
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -18,36 +19,23 @@ namespace PhotoPlugin
 
         private void Image_Loaded(object sender, RoutedEventArgs e)
         {
-            // Create the TransformedBitmap
-            //TransformedBitmap transformBmp = new TransformedBitmap();
-
             // Create a BitmapImage
             BitmapImage bmpImage = new BitmapImage();
             bmpImage.BeginInit();
             bmpImage.UriSource = new Uri("../../Images/pidgeon.jpg", UriKind.RelativeOrAbsolute);
             bmpImage.EndInit();
 
-            // Properties must be set between BeginInit and EndInit
-            //transformBmp.BeginInit();
-            //transformBmp.Source = bmpImage;
-            //RotateTransform transform = new RotateTransform(90);
-            //transformBmp.Transform = transform;
-            //transformBmp.EndInit();
-
             var image = sender as Image;
             if (image != null) image.Source = bmpImage;
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void RotateClockwise_Click(object sender, RoutedEventArgs e)
         {
-            Image = RotateCw();
+            Image.Source = RotateCw();
         }
 
-        private Image RotateCw()
+        private BitmapSource RotateCw()
         {
-
-            Image img = Image;
-
             TransformedBitmap transformBmp = new TransformedBitmap();
             transformBmp.BeginInit();
             transformBmp.Source = (BitmapSource)Image.Source;
@@ -55,9 +43,19 @@ namespace PhotoPlugin
             transformBmp.Transform = transform;
             transformBmp.EndInit();
 
-            img.Source = transformBmp;
+            BitmapSource bitmapSource = transformBmp;
 
-            return img;
+            return bitmapSource;
+        }
+
+        private void UndoButton_Click(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Undo");
+        }
+
+        private void RedoButton_Click(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Redo");
         }
     }
 }
