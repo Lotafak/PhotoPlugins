@@ -1,29 +1,19 @@
-# README #
+# PhotoPlugins #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+App implementing extensions for manipulating and image
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Dunno
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Dunno
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Shit
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Me
