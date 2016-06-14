@@ -9,9 +9,21 @@
     <DockPanel >
         <Menu DockPanel.Dock="Top" Height="24" Name="Menu">
             <MenuItem Header="File">
-                <MenuItem Header="Add plugins..." Click="AddPlugins_Click">
+                <MenuItem Header="Open file" Command="Open">
+                    <MenuItem.Icon>
+                        <Image Source="Images/16/folder-open.png"
+                               RenderOptions.BitmapScalingMode="Fant"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Add plugins..." Click="AddPlugins_Click" >
                     <MenuItem.Icon>
                         <Image Source="Images/16/plugin.png"
+                               RenderOptions.BitmapScalingMode="Fant"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save" Command="Save">
+                    <MenuItem.Icon>
+                        <Image Source="Images/16/save.png"
                                RenderOptions.BitmapScalingMode="Fant"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
@@ -38,5 +50,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="Undo" Executed="UndoButton_Click"></CommandBinding>
         <CommandBinding Command="Redo" Executed="RedoButton_Click"></CommandBinding>
+        <CommandBinding Command="Save" Executed="SaveMenuButton_Click"></CommandBinding>
+        <CommandBinding Command="Open" Executed="OpenFileMenu_Click"></CommandBinding>
     </Window.CommandBindings>
 </Window>

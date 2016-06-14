@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using ICommand = CommandInterface.ICommand;
 
 namespace PhotoPlugin
@@ -26,34 +29,8 @@ namespace PhotoPlugin
 
         private void Image_Loaded(object sender, RoutedEventArgs e)
         {
-            // Create a BitmapImage
-            BitmapImage bmpImage = new BitmapImage();
-            bmpImage.BeginInit();
-            bmpImage.UriSource = new Uri("../../Images/pidgeon.jpg", UriKind.RelativeOrAbsolute);
-            bmpImage.EndInit();
-
-            var image = sender as Image;
-            if (image != null) image.Source = bmpImage;
+            
         }
-
-        //private void RotateClockwise_Click(object sender, RoutedEventArgs e)
-        //{
-        //    RotateCw();
-        //}
-
-        //private void RotateCw()
-        //{
-        //    TransformedBitmap transformBmp = new TransformedBitmap();
-        //    transformBmp.BeginInit();
-        //    transformBmp.Source = (BitmapSource)Image.Source;
-        //    RotateTransform transform = new RotateTransform(90);
-        //    transformBmp.Transform = transform;
-        //    transformBmp.EndInit();
-
-        //    BitmapSource bitmapSource = transformBmp;
-
-        //    Image.Source = bitmapSource;
-        //}
 
         private void UndoButton_Click(object sender, ExecutedRoutedEventArgs e)
         {
@@ -83,6 +60,7 @@ namespace PhotoPlugin
 
         private void AddPlugins_Click(object sender, RoutedEventArgs e)
         {
+#if DEBUG
             string path = "";
             var directoryInfo = Directory.GetParent(Directory.GetCurrentDirectory()).Parent;
             var o = directoryInfo?.Parent;
@@ -91,6 +69,10 @@ namespace PhotoPlugin
                 var startupPath = o.FullName;
                 path = startupPath + @"\Plugins\bin\Debug\Plugins.dll";
             }
+#else
+            var dir = Directory.GetCurrentDirectory();
+            string path = dir + @"\Plugins.dll";
+#endif
             var assembly = Assembly.LoadFrom(path);
 
             //var type = assembly.GetType("Plugin.ExamplePlugin");    <<< Musimy znac konkretna klase --- Zamiast tego to co ponizej
@@ -152,6 +134,48 @@ namespace PhotoPlugin
         private void CheckProperties(MenuItem menuItem, Stack<ICommand> stack )
         {
             menuItem.IsEnabled = stack.Count != 0;
+        }
+
+        private void OpenFileMenu_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Select a picture";
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (*.png)|*.png";
+            if (op.ShowDialog() == true)
+            {
+                BitmapImage bmpImage = new BitmapImage();
+                bmpImage.BeginInit();
+                bmpImage.UriSource = new Uri(op.FileName, UriKind.RelativeOrAbsolute);
+                bmpImage.EndInit();
+
+                Image.Source = bmpImage;
+            }
+        }
+
+        private void SaveMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Image.Source != null)
+            {
+                var dialog = new System.Windows.Forms.FolderBrowserDialog();
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    string title = DateTime.Now.ToLongTimeString();
+                    title = title.Replace(":", "_");
+                    using (var fs = new FileStream(dialog.SelectedPath + @"\Image_" + title + ".png", FileMode.Create))
+                    {
+                        BitmapEncoder encoder = new PngBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create((BitmapSource) Image.Source));
+                        encoder.Save(fs);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please choose a picture !", "No picture", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
