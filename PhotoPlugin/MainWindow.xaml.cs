@@ -70,7 +70,12 @@ namespace PhotoPlugin
                 path = startupPath + @"\Plugins\bin\Debug\Plugins.dll";
             }
 #else
+
             var dir = Directory.GetCurrentDirectory();
+            if (dir.StartsWith("file:///"))
+            {
+                dir = dir.Substring(8);
+            }
             string path = dir + @"\Plugins.dll";
 #endif
             var assembly = Assembly.LoadFrom(path);
@@ -123,7 +128,7 @@ namespace PhotoPlugin
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuItem;
-            if (menuItem != null)
+            if (menuItem != null && Image.Source != null)
             {
                 var plugin = (ICommand) menuItem.DataContext;
                 Image.Source = plugin.Execute(Image.Source);
