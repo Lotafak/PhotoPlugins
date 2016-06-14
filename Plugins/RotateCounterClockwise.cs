@@ -4,19 +4,19 @@ using ICommand = CommandInterface.ICommand;
 
 namespace Plugins
 {
-    public class RotateClockwise : ICommand
+    public class RotateCounterClockwise : ICommand
     {
-        public string Name { get; } = "Rotate Clockwise";
-        public string IconPath { get; } = "rotate-cw.png";
+        public string Name { get; } = "Rotate Counter Clockwise";
+        public string IconPath { get; } = "rotate-ccw.png";
 
         public BitmapSource Execute(ImageSource imageSource)
         {
-            return doWork(imageSource, 90);
+            return doWork(imageSource, -90);
         }
 
         public BitmapSource UnExecute(ImageSource imageSource)
         {
-            return doWork(imageSource, -90);
+            return doWork(imageSource, 90);
         }
 
         private BitmapSource doWork(ImageSource imageSource, int degree)
@@ -28,9 +28,8 @@ namespace Plugins
             transformBmp.Transform = transform;
             transformBmp.EndInit();
 
-            BitmapSource bitmapSource = transformBmp; 
+            BitmapSource bitmapSource = transformBmp;
             return bitmapSource;
         }
     }
 }
-

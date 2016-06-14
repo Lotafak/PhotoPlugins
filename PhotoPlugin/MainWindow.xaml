@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <DockPanel >
-        <Menu DockPanel.Dock="Top" Height="24">
+        <Menu DockPanel.Dock="Top" Height="24" Name="Menu">
             <MenuItem Header="File">
                 <MenuItem Header="Add plugins..." Click="AddPlugins_Click">
                     <MenuItem.Icon>
@@ -16,7 +16,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Edit">
+            <MenuItem Header="Edit" Name="Edit">
                 <MenuItem Header="_Undo" Command="Undo">
                     <MenuItem.Icon>
                         <Image Source="Images/16/undo.png"
@@ -29,12 +29,6 @@
                            RenderOptions.BitmapScalingMode="Fant"/>
                     </MenuItem.Icon>
                 </MenuItem>
-            </MenuItem>
-            <MenuItem Width="24" Click="RotateClockwise_Click">
-                <MenuItem.Icon>
-                    <Image Source="Images/16/rotate-cw.png"
-                           RenderOptions.BitmapScalingMode="Fant"/>
-                </MenuItem.Icon>
             </MenuItem>
         </Menu>
         <Grid Name="MainGrid">

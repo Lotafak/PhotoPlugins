@@ -26,35 +26,35 @@ namespace PhotoPlugin
             set { _image = value; }
         }
 
-        public void Redo(int levels)
-        {
-            for (int i = 1; i <= levels; i++)
-            {
-                if (_Redocommands.Count != 0)
-                {
-                    ICommand command = _Redocommands.Pop();
-                    command.Execute();
-                    _Undocommands.Push(command);
-                }
+        //public void Redo(int levels)
+        //{
+        //    for (int i = 1; i <= levels; i++)
+        //    {
+        //        if (_Redocommands.Count != 0)
+        //        {
+        //            ICommand command = _Redocommands.Pop();
+        //            command.Execute();
+        //            _Undocommands.Push(command);
+        //        }
 
-            }
-            EnableDisableUndoRedoFeature?.Invoke(null, null);
-        }
+        //    }
+        //    EnableDisableUndoRedoFeature?.Invoke(null, null);
+        //}
 
-        public void Undo(int levels)
-        {
-            for (int i = 1; i <= levels; i++)
-            {
-                if (_Undocommands.Count != 0)
-                {
-                    ICommand command = _Undocommands.Pop();
-                    command.UnExecute();
-                    _Redocommands.Push(command);
-                }
+        //public void Undo(int levels)
+        //{
+        //    for (int i = 1; i <= levels; i++)
+        //    {
+        //        if (_Undocommands.Count != 0)
+        //        {
+        //            ICommand command = _Undocommands.Pop();
+        //            command.UnExecute();
+        //            _Redocommands.Push(command);
+        //        }
 
-            }
-            EnableDisableUndoRedoFeature?.Invoke(null, null);
-        }
+        //    }
+        //    EnableDisableUndoRedoFeature?.Invoke(null, null);
+        //}
 
         //public void InsertInUnDoRedoForResize(Image image)
         //{

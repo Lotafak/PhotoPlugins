@@ -1,19 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ICommand = CommandInterface.ICommand;
 
 namespace PhotoPlugin
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
+        private List<ICommand> pluginList = new List<ICommand>();
+        private Stack<ICommand> undoStack = new Stack<ICommand>(); 
+        private Stack<ICommand> redoStack = new Stack<ICommand>(); 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,46 +36,61 @@ namespace PhotoPlugin
             if (image != null) image.Source = bmpImage;
         }
 
-        private void RotateClockwise_Click(object sender, RoutedEventArgs e)
-        {
-            RotateCw();
-        }
+        //private void RotateClockwise_Click(object sender, RoutedEventArgs e)
+        //{
+        //    RotateCw();
+        //}
 
-        private void RotateCw()
-        {
-            TransformedBitmap transformBmp = new TransformedBitmap();
-            transformBmp.BeginInit();
-            transformBmp.Source = (BitmapSource)Image.Source;
-            RotateTransform transform = new RotateTransform(90);
-            transformBmp.Transform = transform;
-            transformBmp.EndInit();
+        //private void RotateCw()
+        //{
+        //    TransformedBitmap transformBmp = new TransformedBitmap();
+        //    transformBmp.BeginInit();
+        //    transformBmp.Source = (BitmapSource)Image.Source;
+        //    RotateTransform transform = new RotateTransform(90);
+        //    transformBmp.Transform = transform;
+        //    transformBmp.EndInit();
 
-            BitmapSource bitmapSource = transformBmp;
+        //    BitmapSource bitmapSource = transformBmp;
 
-            Image.Source = bitmapSource;
-        }
+        //    Image.Source = bitmapSource;
+        //}
 
         private void UndoButton_Click(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBox.Show("Undo");
+            if (undoStack.Count > 0)
+            {
+                Image tempImg = Image;
+                ICommand plugin = undoStack.Pop();
+                tempImg.Source = plugin.UnExecute(tempImg.Source);
+                redoStack.Push(plugin);
+                Image.Source = tempImg.Source;
+                //CheckProperties(e.OriginalSource as MenuItem, undoStack);
+            }
         }
 
         private void RedoButton_Click(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBox.Show("Redo");
+            if (redoStack.Count > 0)
+            {
+                Image tempImg = Image;
+                ICommand plugin = redoStack.Pop();
+                tempImg.Source = plugin.Execute(tempImg.Source);
+                undoStack.Push(plugin);
+                Image.Source = tempImg.Source;
+            }
+            //CheckProperties(sender as MenuItem, redoStack);
         }
 
         private void AddPlugins_Click(object sender, RoutedEventArgs e)
         {
             string path = "";
-            var o = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent;
+            var directoryInfo = Directory.GetParent(Directory.GetCurrentDirectory()).Parent;
+            var o = directoryInfo?.Parent;
             if (o != null)
             {
                 var startupPath = o.FullName;
                 path = startupPath + @"\Plugins\bin\Debug\Plugins.dll";
             }
-            //Ladowanie wszystkich pluginow z jakiegos predefiniowanego folderu
-            //Albo Plugin manager pozwalajacy wybierac jakie pluginy uzyc
             var assembly = Assembly.LoadFrom(path);
 
             //var type = assembly.GetType("Plugin.ExamplePlugin");    <<< Musimy znac konkretna klase --- Zamiast tego to co ponizej
@@ -78,15 +98,31 @@ namespace PhotoPlugin
 
             foreach (var type in types)
             {
-                if (type.IsClass && type.IsPublic && typeof(CommandInterface.ICommand).IsAssignableFrom(type))
+                if (type.IsClass && type.IsPublic && typeof(ICommand).IsAssignableFrom(type))
                 {
-                    var pluginPlainObject = Activator.CreateInstance(type, Image.Source);
+                    var pluginPlainObject = Activator.CreateInstance(type);
 
-                    var plugin = (CommandInterface.ICommand)pluginPlainObject;
+                    var plugin = (ICommand)pluginPlainObject;
+                    pluginList.Add(plugin);
 
-                    Image.Source = plugin.Execute();
+                    MenuItem menuItem = new MenuItem();
+                    menuItem.ToolTip = plugin.Name;
+                    menuItem.Width = 24;
+                    menuItem.Click += MenuItem_Click;
+                    menuItem.DataContext = plugin;
+                    Image img = new Image();
+                    BitmapImage bi = new BitmapImage();
+                    bi.BeginInit();
+                    string iconPath = "Plugins.Resources." + plugin.IconPath;
+                    bi.StreamSource = assembly.GetManifestResourceStream(iconPath);
+                    bi.EndInit();
+                    img.Source = bi;
+                    menuItem.Icon = img; 
+                    Menu.Items.Add(menuItem);
                 }
             }
+            var button = sender as MenuItem;
+            if (button != null) button.IsEnabled = false;
 
             /*
  * Aplikacja z GUI
@@ -100,6 +136,22 @@ namespace PhotoPlugin
  * Undo redo można zrealizować na przykład przez zapamiętywanie wszystkich stanów jako osobne obrazy (gorzej)
  * Undo redo lepiej zrealizować wykonując na niewiczocznym obrazie wszystkie operacje oprócz ostatniej i zwracanie takiego obrazu
  */
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                var plugin = (ICommand) menuItem.DataContext;
+                Image.Source = plugin.Execute(Image.Source);
+                undoStack.Push(plugin);
+            }
+        }
+
+        private void CheckProperties(MenuItem menuItem, Stack<ICommand> stack )
+        {
+            menuItem.IsEnabled = stack.Count != 0;
         }
     }
 }

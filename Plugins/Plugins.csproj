@@ -33,6 +33,8 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,12 +46,23 @@
   <ItemGroup>
     <Compile Include="RotateClockwise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RotateCounterClockwise.cs" />
+    <Compile Include="ToGrayscale.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ICommand\CommandInterface.csproj">
       <Project>{02c9b748-e3fa-4e94-95d9-6bd24ef309a6}</Project>
       <Name>CommandInterface</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\rotate-cw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\rotate-ccw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\grayscale.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
